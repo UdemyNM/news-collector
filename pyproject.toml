@@ -10,7 +10,8 @@ requires-python = ">=3.11"
 dependencies = ["httpx", "feedparser"]
 
 [project.optional-dependencies]
-dev = ["pytest"]
+mcp = ["mcp[cli]"]
+dev = ["pytest", "mcp[cli]"]
 
 [project.scripts]
 news-collector = "news_collector.cli:main"
@@ -20,3 +21,4 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
