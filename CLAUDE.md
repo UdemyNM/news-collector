@@ -33,6 +33,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 │   ├── sources.py             Zenn / Qiita / GitHub Releases の取得
 │   ├── db.py                  SQLite への保存（URL で重複排除）
 │   └── models.py              Article（記事のデータ型）
+├── mcp_server/
+│   └── server.py              ためた記事を検索する MCP サーバー（stdio。search_news / get_article）
 ├── tests/                     pytest（ネットワークはモック）
 │   ├── sample_data.py         テスト用のフィード fixture
 │   └── test_*.py
