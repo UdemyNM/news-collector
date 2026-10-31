@@ -1,0 +1,19 @@
+# news-collector の設定。パスは、このファイルのあるフォルダからの相対パス。
+
+[database]
+path = "data/news.db"
+
+# 取得対象。type は zenn / qiita / github_releases。
+# zenn・qiita は tag、github_releases は repo（owner/repo）を指定する。
+
+[[sources]]
+type = "zenn"
+tag = "claudecode"
+
+[[sources]]
+type = "qiita"
+tag = "ClaudeCode"
+
+[[sources]]
+type = "github_releases"
+repo = "anthropics/claude-code"

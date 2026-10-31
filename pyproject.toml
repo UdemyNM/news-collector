@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "news-collector"
+version = "0.1.0"
+description = "Zenn / Qiita / GitHub Releases のニュースを SQLite に集める"
+requires-python = ">=3.11"
+dependencies = ["httpx", "feedparser"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+news-collector = "news_collector.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
