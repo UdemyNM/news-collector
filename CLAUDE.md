@@ -21,6 +21,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```
 .
 ├── CLAUDE.md                  このファイル
+├── .github/workflows/
+│   └── test.yml               main 向けの PR で pytest を実行する CI
 ├── config.toml                取得対象と DB の場所の設定
 ├── pyproject.toml             パッケージ定義（コマンド news-collector の登録を含む）
 ├── docs/
