@@ -5,6 +5,12 @@ from datetime import UTC, date, datetime, time, timedelta, timezone
 from pathlib import Path
 from typing import TypedDict
 
+from mcp.server import MCPServer
+from mcp.server.mcpserver.exceptions import ToolError
+
+from news_collector.config import load_config
+
+CONFIG_PATH = Path(__file__).resolve().parent.parent / "config.toml"
 MAX_RESULTS = 10
 JST = timezone(timedelta(hours=9))
 
@@ -128,3 +134,57 @@ def fetch_article(db_path: Path, article_id: int) -> ArticleDetail | None:
         published_at=row[4],
         summary=row[5],
     )
+
+
+def create_server(db_path: Path) -> MCPServer:
+    """db_path の記事 DB を検索するサーバーを作る。DB は呼び出しのたびに開く。"""
+    server = MCPServer("news-collector")
+
+    @server.tool()
+    def search_news(
+        keyword: str | None = None,
+        since: str | None = None,
+        until: str | None = None,
+        source: str | None = None,
+    ) -> list[ArticleSummary]:
+        """ためた技術ニュース記事（Zenn / Qiita / GitHub Releases）を検索する。引数はすべて省略できる。
+
+        結果は公開日時の新しい順で、最大 10 件。要約は含まないので、中身を知りたい記事は
+        get_article で id を指定して取り出すこと。
+
+        keyword: タイトルまたは要約に含まれる文字列（部分一致）。
+        since / until: 公開日の範囲。YYYY-MM-DD 形式の日本時間の日付で、両端を含む。
+            「先週」などの言い方は、呼ぶ側で具体的な日付に直して渡すこと。
+            until を省略すると今日まで。
+        source: 出どころの先頭の文字列。zenn / qiita / github など（大文字小文字は区別しない）。
+        """
+        today = datetime.now(JST).date()
+        try:
+            return search_articles(
+                db_path, keyword=keyword, since=since, until=until, source=source, today=today
+            )
+        except ValueError as e:
+            raise ToolError(str(e)) from None
+        except sqlite3.OperationalError:
+            raise ToolError(_DB_UNAVAILABLE) from None
+
+    @server.tool()
+    def get_article(id: int) -> ArticleDetail:
+        """記事を 1 件、id で取り出す。id は search_news の結果にあるものを渡す。"""
+        try:
+            article = fetch_article(db_path, id)
+        except sqlite3.OperationalError:
+            raise ToolError(_DB_UNAVAILABLE) from None
+        if article is None:
+            raise ToolError(f"id={id} の記事は見つかりません")
+        return article
+
+    return server
+
+
+_DB_UNAVAILABLE = "記事 DB を開けません。先に news-collector を実行して記事を集めてください"
+
+mcp = create_server(load_config(CONFIG_PATH).db_path)
+
+if __name__ == "__main__":
+    mcp.run()
