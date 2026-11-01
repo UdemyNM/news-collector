@@ -30,6 +30,16 @@ jobs:
         with:
           fetch-depth: 1
 
+      # Claude が pytest を実行できるよう、先に Python と依存ライブラリを用意する
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: 依存ライブラリをインストール
+        run: python -m pip install -e ".[dev]"
+
       - name: Run Claude Code
         id: claude
         uses: anthropics/claude-code-action@v1
@@ -47,6 +57,7 @@ jobs:
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
           # 機能追加は add-feature スキルで行い、pytest の実行を許可する
+          # （依存ライブラリは上のステップでインストール済み。.venv は作らない）
           claude_args: >-
             --append-system-prompt "機能追加を頼まれたときは、実装の前に add-feature スキル（.claude/skills/add-feature）を呼び出し、その手順に従うこと。"
             --allowedTools "Skill,Bash(pytest:*),Bash(python -m pytest:*)"
