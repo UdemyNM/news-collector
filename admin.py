@@ -6,6 +6,7 @@
 """
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -14,6 +15,12 @@ from news_collector.db import Database
 
 CONFIG_PATH = Path(__file__).resolve().parent / "config.toml"
 LIST_LIMIT = 10
+_CONTROL_CHARS = re.compile(r"[\x00-\x1f\x7f-\x9f]")
+
+
+def _clean(text: str) -> str:
+    """外部フィード由来の文字列から制御文字（ANSI エスケープを含む）を除く。"""
+    return _CONTROL_CHARS.sub("", text)
 
 
 def main(argv=None, config_path=CONFIG_PATH) -> int:
@@ -27,6 +34,14 @@ def main(argv=None, config_path=CONFIG_PATH) -> int:
         config = load_config(config_path)
     except ConfigError as e:
         print(f"エラー: {e}", file=sys.stderr)
+        return 1
+
+    # 閲覧専用なので、DB がないときに Database() で空の DB を作ってしまわない
+    if not Path(config.db_path).exists():
+        print(
+            "エラー: DB がありません。先に news-collector を実行してください",
+            file=sys.stderr,
+        )
         return 1
 
     with Database(config.db_path) as db:
@@ -51,7 +66,9 @@ def main(argv=None, config_path=CONFIG_PATH) -> int:
         print(f"\n== 記事一覧（{label}、新しい順 最大 {LIST_LIMIT} 件）==")
         for article in db.list_articles(source=args.source, limit=LIST_LIMIT):
             date = (article.published_at or "日付なし")[:10]
-            print(f"{date}  [{article.source}] {article.title}\n           {article.url}")
+            title = _clean(article.title)
+            url = _clean(article.url)
+            print(f"{date}  [{article.source}] {title}\n           {url}")
     return 0
 
 

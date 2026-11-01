@@ -69,3 +69,25 @@ def test_empty_db_shows_zero_articles(tmp_path, capsys):
 
     assert admin.main([], config_path=config) == 0
     assert "記事がありません" in capsys.readouterr().out
+
+
+def test_missing_db_returns_error_without_creating_it(tmp_path, capsys):
+    config = tmp_path / "config.toml"
+    config.write_text(CONFIG, encoding="utf-8")
+
+    assert admin.main([], config_path=config) == 1
+    assert "DB がありません" in capsys.readouterr().err
+    assert not (tmp_path / "news.db").exists()
+
+
+def test_control_characters_are_stripped_from_output(tmp_path, capsys):
+    config = tmp_path / "config.toml"
+    config.write_text(CONFIG, encoding="utf-8")
+    with Database(tmp_path / "news.db") as db:
+        db.save([Article("zenn:claudecode", "ev\x1b[31mil", "https://example.com/\x07a", None, "s")])
+
+    admin.main([], config_path=config)
+
+    out = capsys.readouterr().out
+    assert "\x1b" not in out and "\x07" not in out
+    assert "ev[31mil" in out

@@ -177,3 +177,16 @@ def test_list_articles_orders_newest_first_with_null_dates_last(tmp_path):
             "https://example.com/old",
             "https://example.com/none",
         ]
+
+
+def test_list_articles_orders_by_real_time_across_timezones(tmp_path):
+    # 文字列では "+09:00" の方が大きいが、実際の時刻は UTC 側の方が新しい
+    with Database(tmp_path / "news.db") as db:
+        db.save([
+            Article("s", "jst", "https://example.com/jst", "2026-10-31T08:00:00+09:00", "x"),
+            Article("s", "utc", "https://example.com/utc", "2026-10-30T23:30:00+00:00", "x"),
+        ])
+        assert [a.url for a in db.list_articles()] == [
+            "https://example.com/utc",
+            "https://example.com/jst",
+        ]

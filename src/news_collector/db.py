@@ -78,7 +78,12 @@ class Database:
         if source is not None:
             sql += " WHERE source = ?"
             params.append(source)
-        sql += " ORDER BY published_at IS NULL, published_at DESC, id DESC LIMIT ?"
+        # タイムゾーン表記が混在しても実際の時刻順になるよう datetime() で UTC に揃えて比べる。
+        # 解釈できない形式は datetime() が NULL を返すので、日付なしと同じく最後に回す。
+        sql += (
+            " ORDER BY datetime(published_at) IS NULL,"
+            " datetime(published_at) DESC, id DESC LIMIT ?"
+        )
         params.append(limit)
         return [Article(*row) for row in self._conn.execute(sql, params).fetchall()]
 
