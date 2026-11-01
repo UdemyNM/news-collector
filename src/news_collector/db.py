@@ -46,6 +46,12 @@ class Database:
                 added += cursor.rowcount
         return added
 
+    def average_length(self) -> float:
+        """保存済み記事の本文（summary）の平均文字数を返す。"""
+        rows = self._conn.execute("SELECT summary FROM articles").fetchall()
+        total = sum(len(summary) for (summary,) in rows)
+        return total / len(rows)
+
     def close(self):
         self._conn.close()
 
