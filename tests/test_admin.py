@@ -92,6 +92,50 @@ def test_load_view_strips_control_characters(tmp_path):
     assert article.title == "ev[31mil"
 
 
+def test_load_view_broken_db_raises_admin_error(tmp_path):
+    config = tmp_path / "config.toml"
+    config.write_text(CONFIG, encoding="utf-8")
+    (tmp_path / "news.db").write_text("これは SQLite ではない" * 100, encoding="utf-8")
+
+    with pytest.raises(admin.AdminError, match="DB を読めません"):
+        admin.load_view(None, config_path=config)
+
+
+def test_main_broken_db_returns_error(tmp_path, capsys):
+    config = tmp_path / "config.toml"
+    config.write_text(CONFIG, encoding="utf-8")
+    (tmp_path / "news.db").write_text("これは SQLite ではない" * 100, encoding="utf-8")
+
+    code = admin.main([], config_path=config, show=lambda *a: None)
+
+    assert code == 1
+    assert "DB を読めません" in capsys.readouterr().err
+
+
+def test_main_window_failure_returns_error(tmp_path, capsys):
+    config = setup_env(tmp_path)
+
+    def show(*_):
+        raise admin.AdminError("画面を開けません: no display")
+
+    code = admin.main([], config_path=config, show=show)
+
+    assert code == 1
+    assert "画面を開けません" in capsys.readouterr().err
+
+
+def test_show_window_without_display_raises_admin_error(monkeypatch):
+    tk = pytest.importorskip("tkinter")
+
+    def no_display(*_a, **_k):
+        raise tk.TclError("no display name")
+
+    monkeypatch.setattr(tk, "Tk", no_display)
+
+    with pytest.raises(admin.AdminError, match="画面を開けません"):
+        admin.show_window(admin.AdminView({}, []), None, lambda s: None)
+
+
 def test_main_passes_view_and_source_to_show(tmp_path):
     config = setup_env(tmp_path)
     calls = []

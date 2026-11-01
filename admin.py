@@ -10,6 +10,7 @@
 
 import argparse
 import re
+import sqlite3
 import sys
 import webbrowser
 from dataclasses import dataclass, replace
@@ -51,17 +52,22 @@ def load_view(source=None, config_path=CONFIG_PATH) -> AdminView:
     if not Path(config.db_path).exists():
         raise AdminError("DB がありません。先に news-collector を実行してください")
 
-    with Database(config.db_path) as db:
-        counts = db.count_by_source()
-        if source is not None and source not in counts:
-            known = ", ".join(counts) or "なし"
-            raise AdminError(
-                f"出どころ {source!r} の記事はありません（あるもの: {known}）"
-            )
-        articles = [
-            replace(a, title=_clean(a.title), url=_clean(a.url), source=_clean(a.source))
-            for a in db.list_articles(source=source, limit=LIST_LIMIT)
-        ]
+    try:
+        with Database(config.db_path) as db:
+            counts = db.count_by_source()
+            if source is not None and source not in counts:
+                known = ", ".join(counts) or "なし"
+                raise AdminError(
+                    f"出どころ {source!r} の記事はありません（あるもの: {known}）"
+                )
+            articles = [
+                replace(
+                    a, title=_clean(a.title), url=_clean(a.url), source=_clean(a.source)
+                )
+                for a in db.list_articles(source=source, limit=LIST_LIMIT)
+            ]
+    except sqlite3.Error as e:
+        raise AdminError(f"DB を読めません: {e}") from e
     return AdminView(counts=counts, articles=articles)
 
 
@@ -73,7 +79,11 @@ def show_window(view: AdminView, source, reload) -> None:
     import tkinter as tk
     from tkinter import messagebox, ttk
 
-    root = tk.Tk()
+    try:
+        root = tk.Tk()
+    except tk.TclError as e:
+        # ディスプレイがない環境（SSH・ヘッドレス CI など）
+        raise AdminError(f"画面を開けません: {e}") from e
     root.title("news-collector 管理画面")
     root.geometry("900x520")
 
@@ -166,7 +176,11 @@ def main(argv=None, config_path=CONFIG_PATH, show=show_window) -> int:
         print(f"エラー: {e}", file=sys.stderr)
         return 1
 
-    show(view, args.source, lambda source: load_view(source, config_path))
+    try:
+        show(view, args.source, lambda source: load_view(source, config_path))
+    except AdminError as e:
+        print(f"エラー: {e}", file=sys.stderr)
+        return 1
     return 0
 
 
