@@ -26,6 +26,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ├── config.toml                取得対象と DB の場所の設定
 ├── pyproject.toml             パッケージ定義（コマンド news-collector の登録を含む）
 ├── admin.py                   ためた記事の管理画面（出どころ別の件数と一覧 10 件。--source で切り替え）
+├── admin_gui.py               admin.py と同じ内容を Tkinter の画面で見る（load_view が読み取り、run_gui が画面）
 ├── docs/
 │   └── news-collector-design.md   設計書
 ├── src/news_collector/        本体
