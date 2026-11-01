@@ -64,29 +64,6 @@ class Database:
         ).fetchone()
         return count
 
-    def count_by_source(self) -> dict[str, int]:
-        """出どころ（source 列）ごとの記事件数を返す。記事がなければ空の dict。"""
-        rows = self._conn.execute(
-            "SELECT source, COUNT(*) FROM articles GROUP BY source ORDER BY source"
-        ).fetchall()
-        return dict(rows)
-
-    def list_articles(self, source: str | None = None, limit: int = 10) -> list[Article]:
-        """公開日時の新しい順に記事を返す（日付なしは最後）。source を指定するとその出どころだけ。"""
-        sql = "SELECT source, title, url, published_at, summary FROM articles"
-        params: list[str | int] = []
-        if source is not None:
-            sql += " WHERE source = ?"
-            params.append(source)
-        # タイムゾーン表記が混在しても実際の時刻順になるよう datetime() で UTC に揃えて比べる。
-        # 解釈できない形式は datetime() が NULL を返すので、日付なしと同じく最後に回す。
-        sql += (
-            " ORDER BY datetime(published_at) IS NULL,"
-            " datetime(published_at) DESC, id DESC LIMIT ?"
-        )
-        params.append(limit)
-        return [Article(*row) for row in self._conn.execute(sql, params).fetchall()]
-
     def close(self):
         self._conn.close()
 
