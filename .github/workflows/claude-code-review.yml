@@ -2,21 +2,18 @@ name: Claude Code Review
 
 on:
   pull_request:
-    types: [opened, synchronize, ready_for_review, reopened]
-    # Optional: Only run on specific file changes
-    # paths:
-    #   - "src/**/*.ts"
-    #   - "src/**/*.tsx"
-    #   - "src/**/*.js"
-    #   - "src/**/*.jsx"
+    # closed は main へのマージ時の起動用（下の if でマージ済みのみに絞る）
+    types: [opened, synchronize, ready_for_review, reopened, closed]
+    # Python ファイルに変更があるときだけ動かす
+    paths:
+      - "**/*.py"
 
 jobs:
   claude-review:
-    # Optional: Filter by PR author
-    # if: |
-    #   github.event.pull_request.user.login == 'external-contributor' ||
-    #   github.event.pull_request.user.login == 'new-developer' ||
-    #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
+    # closed のときは、マージされた PR だけレビューする
+    if: |
+      github.event.action != 'closed' ||
+      github.event.pull_request.merged == true
 
     runs-on: ubuntu-latest
     permissions:
@@ -36,10 +33,30 @@ jobs:
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          plugin_marketplaces: 'https://github.com/anthropics/claude-code.git'
-          plugins: 'code-review@claude-code-plugins'
-          prompt: '/code-review:code-review --comment ${{ github.repository }}/pull/${{ github.event.pull_request.number }}'
-          claude_args: '--allowedTools "mcp__github_inline_comment__create_inline_comment"'
-          # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
-          # or https://code.claude.com/docs/en/cli-reference for available options
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
 
+            この PR で変更された Python ファイル（*.py）をレビューしてください。
+
+            手順:
+            1. `gh pr diff ${{ github.event.pull_request.number }} --name-only` で変更ファイルを調べ、
+               *.py だけを対象にする。
+            2. 対象の Python ファイルを、差分だけでなくファイル全体、1 つずつすべて読む。
+            3. リポジトリ直下の CLAUDE.md を読み、その規約を確認する。
+            4. 次の 3 つの観点でチェックする。
+               - セキュリティ: 秘密情報の埋め込み、SQL インジェクション、
+                 安全でない入力の扱い、危険な関数の利用など
+               - バグ: ロジックの誤り、例外処理の漏れ、エッジケース、型の不整合など
+               - CLAUDE.md の規約: CLAUDE.md に書かれた構成・ルールに反していないか
+            5. 問題が見つかった行には、インラインコメントを付ける。
+               最後に、全体の要約を `gh pr comment` で 1 件投稿する。
+               問題がなければ、その旨を要約コメントに書く。
+
+            コメントは日本語で、簡潔に書くこと。
+            各指摘に、観点（セキュリティ / バグ / 規約）と、直し方の提案を含めること。
+            コードは変更しないこと。
+          claude_args: >-
+            --model claude-sonnet-5-5
+            --allowedTools
+            "mcp__github_inline_comment__create_inline_comment,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),Read,Glob,Grep"
