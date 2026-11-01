@@ -46,5 +46,8 @@ jobs:
           # Optional: Add claude_args to customize behavior and configuration
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://code.claude.com/docs/en/cli-reference for available options
-          # claude_args: '--allowed-tools Bash(gh pr *)'
+          # 機能追加は add-feature スキルで行い、pytest の実行を許可する
+          claude_args: >-
+            --append-system-prompt "機能追加を頼まれたときは、実装の前に add-feature スキル（.claude/skills/add-feature）を呼び出し、その手順に従うこと。"
+            --allowedTools "Skill,Bash(pytest:*),Bash(python -m pytest:*)"
 
