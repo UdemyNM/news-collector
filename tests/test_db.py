@@ -4,13 +4,13 @@ from news_collector.db import Database
 from news_collector.models import Article
 
 
-def make_article(url, title="タイトル", source="zenn:claudecode"):
+def make_article(url, title="タイトル", source="zenn:claudecode", summary="要約"):
     return Article(
         source=source,
         title=title,
         url=url,
         published_at="2026-10-31T09:21:22+00:00",
-        summary="要約",
+        summary=summary,
     )
 
 
@@ -84,3 +84,20 @@ def test_database_creates_missing_parent_directories(tmp_path):
 
     assert added == 1
     assert len(read_rows(path)) == 1
+
+
+def test_average_length_returns_mean_summary_length(tmp_path):
+    with Database(tmp_path / "news.db") as db:
+        db.save(
+            [
+                make_article("https://example.com/a", summary="あいう"),
+                make_article("https://example.com/b", summary="あいうえ"),
+            ]
+        )
+
+        assert db.average_length() == 3.5
+
+
+def test_average_length_returns_zero_when_no_articles(tmp_path):
+    with Database(tmp_path / "news.db") as db:
+        assert db.average_length() == 0.0

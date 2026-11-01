@@ -48,9 +48,10 @@ class Database:
 
     def average_length(self) -> float:
         """保存済み記事の本文（summary）の平均文字数を返す。"""
-        rows = self._conn.execute("SELECT summary FROM articles").fetchall()
-        total = sum(len(summary) for (summary,) in rows)
-        return total / len(rows)
+        (avg,) = self._conn.execute(
+            "SELECT AVG(LENGTH(summary)) FROM articles"
+        ).fetchone()
+        return avg if avg is not None else 0.0
 
     def close(self):
         self._conn.close()
