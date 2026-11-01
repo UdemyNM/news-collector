@@ -134,3 +134,46 @@ def test_count_articles_treats_wildcards_literally(tmp_path):
 
         assert db.count_articles("%") == 1
         assert db.count_articles("_") == 0
+
+
+def test_count_by_source_groups_articles(tmp_path):
+    with Database(tmp_path / "news.db") as db:
+        db.save(
+            [
+                make_article("https://example.com/a", source="zenn:claudecode"),
+                make_article("https://example.com/b", source="zenn:claudecode"),
+                make_article("https://example.com/c", source="qiita:ClaudeCode"),
+            ]
+        )
+
+        assert db.count_by_source() == {"zenn:claudecode": 2, "qiita:ClaudeCode": 1}
+
+
+def test_count_by_source_returns_empty_when_no_articles(tmp_path):
+    with Database(tmp_path / "news.db") as db:
+        assert db.count_by_source() == {}
+
+
+def test_list_articles_filters_by_source_and_limits(tmp_path):
+    with Database(tmp_path / "news.db") as db:
+        zenn = [make_article(f"https://example.com/z{i}", source="zenn:claudecode") for i in range(12)]
+        qiita = [make_article("https://example.com/q", source="qiita:ClaudeCode")]
+        db.save(zenn + qiita)
+
+        assert len(db.list_articles(limit=10)) == 10
+        only_qiita = db.list_articles(source="qiita:ClaudeCode", limit=10)
+        assert [a.url for a in only_qiita] == ["https://example.com/q"]
+
+
+def test_list_articles_orders_newest_first_with_null_dates_last(tmp_path):
+    with Database(tmp_path / "news.db") as db:
+        old = make_article("https://example.com/old")
+        new = Article("zenn:claudecode", "t", "https://example.com/new", "2026-11-01T00:00:00+00:00", "s")
+        undated = Article("zenn:claudecode", "t", "https://example.com/none", None, "s")
+        db.save([old, undated, new])
+
+        assert [a.url for a in db.list_articles()] == [
+            "https://example.com/new",
+            "https://example.com/old",
+            "https://example.com/none",
+        ]
