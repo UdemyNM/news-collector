@@ -53,6 +53,17 @@ class Database:
         ).fetchone()
         return avg if avg is not None else 0.0
 
+    def count_articles(self, keyword: str) -> int:
+        """タイトルまたは本文（summary）にキーワードを含む記事の件数を返す（部分一致）。"""
+        escaped = keyword.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        pattern = f"%{escaped}%"
+        (count,) = self._conn.execute(
+            "SELECT COUNT(*) FROM articles"
+            " WHERE title LIKE ? ESCAPE '\\' OR summary LIKE ? ESCAPE '\\'",
+            (pattern, pattern),
+        ).fetchone()
+        return count
+
     def close(self):
         self._conn.close()
 

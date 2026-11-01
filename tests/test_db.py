@@ -101,3 +101,36 @@ def test_average_length_returns_mean_summary_length(tmp_path):
 def test_average_length_returns_zero_when_no_articles(tmp_path):
     with Database(tmp_path / "news.db") as db:
         assert db.average_length() == 0.0
+
+
+def test_count_articles_counts_title_or_summary_matches(tmp_path):
+    with Database(tmp_path / "news.db") as db:
+        db.save(
+            [
+                make_article("https://example.com/a", title="Claude Code 入門", summary="x"),
+                make_article("https://example.com/b", title="other", summary="Claude の話"),
+                make_article("https://example.com/c", title="other", summary="x"),
+            ]
+        )
+
+        assert db.count_articles("Claude") == 2
+
+
+def test_count_articles_returns_zero_when_no_match(tmp_path):
+    with Database(tmp_path / "news.db") as db:
+        db.save([make_article("https://example.com/a")])
+
+        assert db.count_articles("存在しない") == 0
+
+
+def test_count_articles_treats_wildcards_literally(tmp_path):
+    with Database(tmp_path / "news.db") as db:
+        db.save(
+            [
+                make_article("https://example.com/a", title="100% 達成"),
+                make_article("https://example.com/b", title="abc"),
+            ]
+        )
+
+        assert db.count_articles("%") == 1
+        assert db.count_articles("_") == 0
