@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>週報一覧</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --surface: #ffffff;
+    --text: #1d2330;
+    --muted: #5d6677;
+    --line: #e1e5ec;
+    --accent: #2f5fd0;
+    --accent-soft: #e8eefc;
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12151c;
+      --surface: #1b2029;
+      --text: #e6e9ef;
+      --muted: #9aa3b5;
+      --line: #2b3240;
+      --accent: #7ba2ff;
+      --accent-soft: #232c45;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Yu Gothic UI", "Hiragino Sans", "Meiryo", system-ui, sans-serif;
+    line-height: 1.8;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px 64px; }
+  header.hero { padding: 40px 0 24px; }
+  .hero .label { color: var(--accent); font-weight: 700; letter-spacing: .08em; font-size: .85rem; }
+  .hero h1 { margin: 4px 0 8px; font-size: 2rem; line-height: 1.3; }
+  .hero p { margin: 0; color: var(--muted); }
+
+  ul.reports { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  a.report {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 16px 20px;
+  }
+  a.report:hover, a.report:focus-visible { border-color: var(--accent); outline: none; }
+  a.report h2 { margin: 0 0 4px; font-size: 1.2rem; }
+  a.report:hover h2 { color: var(--accent); }
+  .meta { margin: 0 0 8px; color: var(--muted); font-size: .9rem; }
+  .themes { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+  .themes li {
+    background: var(--accent-soft); color: var(--accent);
+    border-radius: 999px; padding: 0 10px; font-size: .8rem; font-weight: 600;
+  }
+  footer { color: var(--muted); font-size: .85rem; text-align: center; margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--line); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="label">WEEKLY REPORT</div>
+    <h1>週報一覧</h1>
+    <p>直近 7 日にためた記事を、テーマごとにまとめた週報です。新しい順に並んでいます。</p>
+  </header>
+
+  <main>
+    <ul class="reports">
+      <!-- 新しい週報はこの下に追加する（新しい順） -->
+      <li>
+        <a class="report" href="2026-11-02.html">
+          <h2>週報 2026-11-02</h2>
+          <p class="meta">対象期間 2026-10-26 〜 2026-11-02 ／ 記事 52 件</p>
+          <ul class="themes">
+            <li>設定・指示・スキルの設計</li>
+            <li>開発事例・所感</li>
+            <li>安全性・無人運用の検証</li>
+            <li>ツール連携・環境トラブル</li>
+            <li>運用・コスト・レビュー</li>
+            <li>リリース情報</li>
+          </ul>
+        </a>
+      </li>
+    </ul>
+  </main>
+
+  <footer>data/news.db の記事から作成</footer>
+</div>
+</body>
+</html>
