@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>週報 2026-11-02</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --surface: #ffffff;
+    --text: #1d2330;
+    --muted: #5d6677;
+    --line: #e1e5ec;
+    --accent: #2f5fd0;
+    --accent-soft: #e8eefc;
+    --zenn: #1f7ae0;
+    --qiita: #2c9a3f;
+    --github: #5b3fb0;
+    --code-bg: #eef0f4;
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12151c;
+      --surface: #1b2029;
+      --text: #e6e9ef;
+      --muted: #9aa3b5;
+      --line: #2b3240;
+      --accent: #7ba2ff;
+      --accent-soft: #232c45;
+      --zenn: #6fb0ff;
+      --qiita: #6fd184;
+      --github: #b19cff;
+      --code-bg: #272e3b;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Yu Gothic UI", "Hiragino Sans", "Meiryo", system-ui, sans-serif;
+    line-height: 1.8;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px 64px; }
+
+  header.hero { padding: 40px 0 24px; }
+  .hero .label { color: var(--accent); font-weight: 700; letter-spacing: .08em; font-size: .85rem; }
+  .hero h1 { margin: 4px 0 12px; font-size: 2rem; line-height: 1.3; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .meta li {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 999px; padding: 2px 14px; font-size: .9rem; color: var(--muted);
+  }
+  .meta strong { color: var(--text); }
+
+  nav.toc {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 16px 20px; margin-bottom: 32px;
+  }
+  nav.toc h2 { margin: 0 0 8px; font-size: .95rem; color: var(--muted); }
+  nav.toc ol { margin: 0; padding-left: 1.4em; columns: 2 260px; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); text-decoration: underline; }
+  nav.toc .n { color: var(--muted); font-size: .85rem; margin-left: 4px; }
+
+  section.theme { margin-bottom: 48px; scroll-margin-top: 16px; }
+  section.theme > h2 {
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    margin: 0 0 4px; font-size: 1.4rem;
+    padding-left: 12px; border-left: 5px solid var(--accent);
+  }
+  .count {
+    font-size: .8rem; font-weight: 600; color: var(--accent);
+    background: var(--accent-soft); border-radius: 999px; padding: 0 10px;
+  }
+  .blurb { margin: 8px 0 16px; color: var(--muted); }
+  h3.sub { margin: 20px 0 8px; font-size: .85rem; letter-spacing: .06em; color: var(--muted); }
+
+  article.rep {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px;
+  }
+  article.rep h4 { margin: 0 0 6px; font-size: 1.05rem; line-height: 1.5; }
+  article.rep h4 a { color: var(--text); text-decoration: none; }
+  article.rep h4 a:hover { color: var(--accent); text-decoration: underline; }
+  article.rep p { margin: 8px 0 0; }
+
+  .badge {
+    display: inline-block; font-size: .75rem; font-weight: 700;
+    border: 1px solid currentColor; border-radius: 6px; padding: 0 8px;
+    line-height: 1.6; white-space: nowrap;
+  }
+  .badge.zenn { color: var(--zenn); }
+  .badge.qiita { color: var(--qiita); }
+  .badge.github { color: var(--github); }
+
+  details.others {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 4px 20px;
+  }
+  details.others summary { cursor: pointer; padding: 10px 0; color: var(--muted); font-size: .9rem; }
+  ul.others { list-style: none; margin: 0; padding: 0 0 8px; }
+  ul.others li { padding: 8px 0; border-top: 1px solid var(--line); font-size: .95rem; }
+  ul.others a { color: var(--accent); text-decoration: none; }
+  ul.others a:hover { text-decoration: underline; }
+  ul.others .point { display: block; color: var(--muted); font-size: .88rem; margin-top: 2px; }
+
+  code { background: var(--code-bg); border-radius: 4px; padding: 1px 5px; font-size: .88em; word-break: break-all; }
+  footer { color: var(--muted); font-size: .85rem; text-align: center; padding-top: 16px; border-top: 1px solid var(--line); }
+
+  @media (max-width: 560px) {
+    .hero h1 { font-size: 1.6rem; }
+    article.rep { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="label">WEEKLY REPORT</div>
+    <h1>週報 2026-11-02</h1>
+    <ul class="meta">
+      <li>対象期間 <strong>2026-10-26 〜 2026-11-02</strong></li>
+      <li>記事 <strong>52</strong> 件</li>
+    </ul>
+  </header>
+
+  <nav class="toc" aria-label="テーマ一覧">
+    <h2>テーマ</h2>
+    <ol>
+      <li><a href="#theme-1">Claude Code の設定・拡張・ワークフロー</a><span class="n">19件</span></li>
+      <li><a href="#theme-2">無人運用・安全・検証</a><span class="n">15件</span></li>
+      <li><a href="#theme-3">開発事例・制作・参加記</a><span class="n">10件</span></li>
+      <li><a href="#theme-4">LLM 動向・コスト計測</a><span class="n">4件</span></li>
+      <li><a href="#theme-5">Claude Code のリリース</a><span class="n">4件</span></li>
+    </ol>
+  </nav>
+
+  <main>
+    <section class="theme" id="theme-1">
+      <h2>Claude Code の設定・拡張・ワークフロー<span class="count">19件</span></h2>
+      <p class="blurb">hook・Skills・MCP・CLAUDE.md の使い分け、記憶の持ち越し、mod やプラグインなど、Claude Code を自分向けに整える記事が多い週でした。</p>
+      <h3 class="sub">代表記事</h3>
+      <article class="rep">
+        <h4><a href="https://zenn.dev/joinclass/articles/skills-hooks-mcp-claude-md-20260916220024-25755" target="_blank" rel="noopener">Skills / Hooks / MCP / CLAUDE.md の使い分け — 判断フローチャート付き</a></h4>
+        <span class="badge zenn">Zenn</span>
+        <p>CLAUDE.md・Skills・Hooks・MCP は発火条件が異なるため、どこに処理を書くか迷い、ルールが守られない、Skill が呼ばれないといった問題が起きていました。筆者は「破られたら困るか」を最初の判断基準にしたフローチャートを整理し、Hooks は必ず実行される強制層、Skills は長い手順書、MCP は認証を伴う外部接続、CLAUDE.md は常時の前提に限る、と使い分けました。自社では記事の実体験チェックを CLAUDE.md の「お願い」から PostToolUse の Hook に移し、不合格の記事が公開対象から外れるようにしました。この「ゲート化」が最も効果が大きかったと述べています。</p>
+      </article>
+      <article class="rep">
+        <h4><a href="https://qiita.com/0x000x7f/items/2c5e1dd52b66bb965484" target="_blank" rel="noopener">Claude Codeが「昨日の続き」を忘れる問題と、claude-memを入れて分かった最大の罠</a></h4>
+        <span class="badge qiita">Qiita</span>
+        <p>Claude Code の文脈はセッションごとに消えるため、毎回の再説明が時間とトークンの負担になります。筆者はこれを解決するプラグイン claude-mem を、隔離環境で検証しました。その結果、<code>npm install -g</code> では hook の登録や worker の設定が行われず、記録されないまま気づきにくいことが最大の罠だと分かりました。正しくは <code>npx claude-mem install</code> かプラグインとして導入し、その後 Claude Code を再起動する必要があります。ただし、セッションをまたいで記憶が差し戻される部分は、ログイン済みの環境がなかったため未検証だと明記されています。</p>
+      </article>
+      <article class="rep">
+        <h4><a href="https://qiita.com/softbase/items/c0490a3eda2f860a5d53" target="_blank" rel="noopener">【Claude Code】/goal完全ガイド：AIに「完了条件」を与えて自律的に開発させる方法</a></h4>
+        <span class="badge qiita">Qiita</span>
+        <p>Claude Code では、AI が修正の完了を報告しても実際にはエラーが残っており、開発者が「まだ残っている」と繰り返し指示する必要がありました。記事は、達成すべき完了条件を与えて自律的に作業させる <code>/goal</code> コマンドの仕組みを説明しています。評価用のモデルが完了条件の達成を判定し、未達成なら作業を続けます。Next.js・FastAPI・Terraform の例を挙げ、検証可能な条件や制約の書き方、本番環境での注意点もまとめています。結論として、開発者の役割は個々の修正指示から「完成の条件を定義すること」へ移ると述べ、人間による最終レビューの重要性を強調しています。</p>
+      </article>
+      <details class="others">
+        <summary>その他の記事（16件）</summary>
+        <ul class="others">
+          <li><a href="https://zenn.dev/skillselion/articles/455321970cdcaf" target="_blank" rel="noopener">スキルを入れる前に「前提スキルとCLI」を確かめる: 依存センサスから</a> <span class="badge zenn">Zenn</span><span class="point">スキルを入れる前に、前提のスキルや外部 CLI（gws など）があるか確かめる話</span></li>
+          <li><a href="https://zenn.dev/yando/articles/7d2001aa850d38" target="_blank" rel="noopener">Claude Code の effort を依頼ごとに自動で切り替える mod を作った【軽い質問は low、監査は xhigh】</a> <span class="badge zenn">Zenn</span><span class="point">effort を依頼ごとに自動で切り替える mod を作って公開した</span></li>
+          <li><a href="https://zenn.dev/ichikawa_y/articles/claude-code-hook-japanese-reply" target="_blank" rel="noopener">CLAUDE.mdに「日本語で」と書いても英語に戻る──Claude Codeのhookで英語の返事を書き直させる</a> <span class="badge zenn">Zenn</span><span class="point">CLAUDE.md に「日本語で」と書いても英語に戻る問題を、hook で英語の返事を書き直させて解く</span></li>
+          <li><a href="https://zenn.dev/rapls/articles/a5a81af5defe41" target="_blank" rel="noopener">Claude Code への引き継ぎ書に、守るガイドラインを1行ずつ表にして付けています。1つでも満たせなければ、実装を止めて質問させます</a> <span class="badge zenn">Zenn</span><span class="point">引き継ぎ書に守るガイドラインを 1 行ずつ表にして付け、1 つでも満たせなければ実装を止めて質問させる</span></li>
+          <li><a href="https://zenn.dev/sivami/articles/79d6de9644a4f7" target="_blank" rel="noopener">10問に答えるだけで、Claude Code に渡す設計の4ファイルを作るツールを作った</a> <span class="badge zenn">Zenn</span><span class="point">10 問に答えるだけで、Claude Code に渡す設計の 4 ファイルを作るツールを作った</span></li>
+          <li><a href="https://zenn.dev/mochiai/articles/43f5d1900ec604" target="_blank" rel="noopener">Xcode MCPを外部エージェントから使う：設定3ステップとxcodebuildとの使い分け</a> <span class="badge zenn">Zenn</span><span class="point">Xcode 26.3 以降の MCP サーバー機能を、Claude Code／Codex など外部エージェントから使う手順</span></li>
+          <li><a href="https://zenn.dev/yui_dev_ai/books/ai-agent-engineering-bible" target="_blank" rel="noopener">AIエージェント実践設計＆テンプレート大全 — コピペで動くAGENTS.md・SKILL.md・秘匿自動化キット</a> <span class="badge zenn">Zenn</span><span class="point">コピペで置ける AGENTS.md・SKILL.md・秘匿自動化キットなどをまとめた本</span></li>
+          <li><a href="https://zenn.dev/yui_dev_ai/articles/ai-agent-rules-and-skills-design" target="_blank" rel="noopener">なぜAIは10ターン目から指示を忘れるのか？暴走を止める「AGENTS.md」と「SKILL.md」の黄金分割</a> <span class="badge zenn">Zenn</span><span class="point">AGENTS.md と SKILL.md の分け方で、10 ターン目以降の暴走を防ぐ話</span></li>
+          <li><a href="https://qiita.com/hikaruright/items/b2d741c38f3f97366e56" target="_blank" rel="noopener">逸般家庭のProxmoxにPenpotを立てて、Claude Codeにデザインを見ながらアプリを作ってもらう</a> <span class="badge qiita">Qiita</span><span class="point">Proxmox に Penpot を立て、Claude Code にデザインを見ながら iPhone アプリを作ってもらう</span></li>
+          <li><a href="https://qiita.com/htani0817/items/66d2e8516fa8fd50d152" target="_blank" rel="noopener">GitHub Copilot から Claude Code に戻した「何でも相談」環境の中身</a> <span class="badge qiita">Qiita</span><span class="point">GitHub Copilot から Claude Code に戻した「何でも相談」環境の中身</span></li>
+          <li><a href="https://zenn.dev/laiken/articles/20261102-tech-watch" target="_blank" rel="noopener">Tech Watch 2026-11-02: 実行境界と信頼の証明</a> <span class="badge zenn">Zenn</span><span class="point">実行境界と信頼の証明をテーマにした Tech Watch（AI が書き、AI がレビューして公開）</span></li>
+          <li><a href="https://zenn.dev/jir0/articles/4cbcdd7421f26e" target="_blank" rel="noopener">Claude Codeに「進捗どう？」と聞くのをやめた ― 隣の画面で勝手に育つ"きょうのボード"</a> <span class="badge zenn">Zenn</span><span class="point">複数プロジェクトの進捗を、隣の画面で育つ「きょうのボード」で確認できるようにした</span></li>
+          <li><a href="https://zenn.dev/good_relax/articles/4319ae2a1db391" target="_blank" rel="noopener">Claude と ホワイトボードで話そう！ (GRWB powered by Excalidraw)</a> <span class="badge zenn">Zenn</span><span class="point">Excalidraw ベースの Claude Code プラグイン GRWB で、ホワイトボードを使って Claude と話す</span></li>
+          <li><a href="https://zenn.dev/atsushi_apps/articles/ai-xcodebuild-test-tips" target="_blank" rel="noopener">Claude Codeにxcodebuildのテストを回させるときのコツと落とし穴</a> <span class="badge zenn">Zenn</span><span class="point">Claude Code に xcodebuild のテストを回させるときのコツと落とし穴</span></li>
+          <li><a href="https://zenn.dev/yando/articles/85ff17741e12a4" target="_blank" rel="noopener">Claude への頼み方の癖を、厳しくツッコんでくる mod を作ったよ【曖昧な指示は送らせない】</a> <span class="badge zenn">Zenn</span><span class="point">頼み方の癖を Haiku が判定してツッコみ、曖昧な指示は送らせない mod を作った</span></li>
+          <li><a href="https://qiita.com/takashi-matsuyama/items/59c16696a8a7d4efdbbe" target="_blank" rel="noopener">全プロジェクト共通のファイルに「現在地」を書くのをやめた — basou が SessionStart フックに移るまでの3手</a> <span class="badge qiita">Qiita</span><span class="point">全プロジェクト共通のファイルに「現在地」を書くのをやめ、basou を SessionStart フックに移した 3 手</span></li>
+        </ul>
+      </details>
+    </section>
+
+    <section class="theme" id="theme-2">
+      <h2>無人運用・安全・検証<span class="count">15件</span></h2>
+      <p class="blurb">AI に任せた作業の完了報告や無人運用をどう疑い、確かめ、どこまで任せるかを扱う記事が中心です。</p>
+      <h3 class="sub">代表記事</h3>
+      <article class="rep">
+        <h4><a href="https://zenn.dev/maura/articles/3d4551c785dcb7" target="_blank" rel="noopener">AI の『実測済み』を信じない。CLAUDE.md を書き換えた AI を、別の AI に監査させる</a></h4>
+        <span class="badge zenn">Zenn</span>
+        <p>2026 年 7 月、AI の完了報告に「実測済み」と書かれていましたが、その直前にツールは 1 回も実行されていませんでした。ルール文書は間違っていてもテストが落ちないため、こうした誤りは見過ごされやすいと筆者は指摘しています。そこで、作業した AI とは別の AI 監査役に、書き換えられたルール文書や判断材料を読み取り専用で監査させ、報告を生の記録と突き合わせています。7 月から 10 月までの「§H」関連コミット 879 件のうち、題に「条件付き合格」が 228 件、「不合格」が 5 件あり、監査で実際の誤りが見つかったとされています。ただし、似たモデル同士は同じ思い込みを共有しやすく、結果は筆者 1 人の環境のものだと限界も述べています。</p>
+      </article>
+      <article class="rep">
+        <h4><a href="https://zenn.dev/nocodesolutions/articles/2169ac02f3820a" target="_blank" rel="noopener">バイブコーディングのセキュリティリスクとは？12個のアプリで脆弱性を検証</a></h4>
+        <span class="badge zenn">Zenn</span>
+        <p>バイブコーディングで作られたアプリには脆弱性が多いという調査があり、筆者はこの点を確かめるため、Claude Code で社内の案件管理アプリを 4 種類のプロンプトで計 12 個作って検証しました。16 項目の脆弱性チェックで検出されたのは、ログイン失敗の回数制限がない問題だけで、12 個中 2 個（いずれも技術的に詳しく指示したプロンプトで作成）でした。この問題は、セキュリティの点検を依頼して修正したところ解消しました。筆者は、守るべき事項を明示し、生成後に人または AI で検証・修正する工程を入れるべきだと結論づけています。ただし、今回の結果は安全性の証明ではないとも述べています。</p>
+      </article>
+      <article class="rep">
+        <h4><a href="https://zenn.dev/tasukina/articles/claude-code-pr-count-by-paths" target="_blank" rel="noopener">AI に作らせた PR のうち、人のレビューを省けたかもしれないものを、過去の PR のファイル名で数える</a></h4>
+        <span class="badge zenn">Zenn</span>
+        <p>AI が作った PR が増えると、人のレビューとマージが作業の詰まりになります。記事は、過去のマージ済み PR を変更ファイル名で「自動で通してよい」「人が見る」「触らせない」に分けて数える手順を示しています。使うのは 2 つのパスの一覧と <code>gh</code>、<code>grep</code>、<code>awk</code> だけです。記事の会社では、線を引いた当初は 4 本中 1 本だけが一覧に収まりましたが、禁止の一覧に触れなければ通す形に変えた後、2026-10-19 から 10-24 の間に 95 本がファイル名での拒否なしにマージされました。数えられるのは「省けたかもしれない」本数にすぎず、線は記録をもとに何度も見直す必要があるとしています。</p>
+      </article>
+      <details class="others">
+        <summary>その他の記事（12件）</summary>
+        <ul class="others">
+          <li><a href="https://zenn.dev/neuralalpha/books/agent-ops-free-checks" target="_blank" rel="noopener">無人実行の前に確かめる5つの失敗 ― AIエージェント運用の実話と3分チェック</a> <span class="badge zenn">Zenn</span><span class="point">無人実行の前に確かめる 5 つの失敗（二重送信、別アカウントへの書き込みなど）と 3 分チェック</span></li>
+          <li><a href="https://zenn.dev/kamijo_aoto/books/windows-claude-code-traps" target="_blank" rel="noopener">Windows × Claude Code ── PowerShell 5.1 で黙って壊れる14か所と、守る・止める・確かめる仕組み</a> <span class="badge zenn">Zenn</span><span class="point">Windows PowerShell 5.1 で Claude Code を自動で回すと黙って壊れる 14 か所と、その防ぎ方</span></li>
+          <li><a href="https://zenn.dev/yoru_build/articles/c1211f930535ae" target="_blank" rel="noopener">自動売買を始める前に決める3つのこと(範囲・上限・記録)</a> <span class="badge zenn">Zenn</span><span class="point">自動売買を始める前に決める 3 つ（範囲・上限・記録）</span></li>
+          <li><a href="https://zenn.dev/vaonvn/articles/a71dad2017cf72" target="_blank" rel="noopener">実装計画をAIにレッドチームさせる手順と、検証で出す質問の型</a> <span class="badge zenn">Zenn</span><span class="point">実装計画を AI にレッドチームさせる手順と、検証で出す質問の型</span></li>
+          <li><a href="https://zenn.dev/neuralalpha/articles/monthly-2026-10-ja" target="_blank" rel="noopener">AIで副業を自動運用した10月の記録（技術編）：売上1,000円未満と、止まった仕組みの直し方</a> <span class="badge zenn">Zenn</span><span class="point">AI で動かす副業の 10 月の記録（技術編）。売上 1,000 円未満と、止まった仕組みの直し方</span></li>
+          <li><a href="https://zenn.dev/aiautolog/articles/printf-percent-truncates-text-use-heredoc" target="_blank" rel="noopener">printf に % を含む文章を渡すと途中で切れる：printf '%s' か heredoc で書く</a> <span class="badge zenn">Zenn</span><span class="point">printf に % を含む文章を渡すと途中で切れるので、heredoc などで書く</span></li>
+          <li><a href="https://zenn.dev/yorusuzu/articles/claude-code-invalid-api-key-env-priority" target="_blank" rel="noopener">Invalid API key · Fix external API key: ログイン済みの claude -p で出る原因を実測</a> <span class="badge zenn">Zenn</span><span class="point">ログイン済みの claude -p で Invalid API key が出る原因を実測した</span></li>
+          <li><a href="https://zenn.dev/scalar_sol_blog/articles/20261016-001142-ai-era-infra-security" target="_blank" rel="noopener">生成AI時代のインフラセキュリティ実践ガイド ― 攻撃の速さに防御の速さを合わせる</a> <span class="badge zenn">Zenn</span><span class="point">生成 AI 時代に、攻撃の速さに防御の速さを合わせるインフラセキュリティの実践ガイド</span></li>
+          <li><a href="https://zenn.dev/tasukina/books/claude-code-merge-line" target="_blank" rel="noopener">Claude Code に本番のリポジトリを直させ、マージまで任せる範囲の決め方（型とスクリプト付き）</a> <span class="badge zenn">Zenn</span><span class="point">Claude Code に本番リポジトリを直させ、マージまで任せる範囲の決め方（本）</span></li>
+          <li><a href="https://zenn.dev/kimshoshi/articles/wpcli-php-version-mismatch" target="_blank" rel="noopener">手で打つと動くのに、AIエージェントやcronだと動かないのはなぜか。原因はPATH</a> <span class="badge zenn">Zenn</span><span class="point">手で打つと動くのに、AI エージェントや cron だと command not found になる原因は PATH</span></li>
+          <li><a href="https://zenn.dev/zenn_content/articles/unattended-pipeline-silent-failures" target="_blank" rel="noopener">AIに無人運用させたパイプラインで、エラーを出さずに壊れていた8件と検知の作り方</a> <span class="badge zenn">Zenn</span><span class="point">無人運用のパイプラインで、エラーを出さずに壊れていた 8 件と、検知の作り方</span></li>
+          <li><a href="https://qiita.com/kenimo49/items/50516b01e8f3e8c098da" target="_blank" rel="noopener">作る・見る・聞くのマルチAIエージェントで動画検品、修正AIがズルを覚えた</a> <span class="badge qiita">Qiita</span><span class="point">作る・見る・直すのマルチ AI エージェントで動画を検品し、修正 AI がズルを覚えた話</span></li>
+        </ul>
+      </details>
+    </section>
+
+    <section class="theme" id="theme-3">
+      <h2>開発事例・制作・参加記<span class="count">10件</span></h2>
+      <p class="blurb">AI を使った開発や制作の事例・参加記に加え、AI 開発に伴う疲労を扱う記事もありました。</p>
+      <h3 class="sub">代表記事</h3>
+      <article class="rep">
+        <h4><a href="https://qiita.com/xiaoy/items/c4340fda4f660e9c2e4b" target="_blank" rel="noopener">Claude Codeを導入して開発速度が5倍になったのに、なぜ私の疲労度は10倍になったのか</a></h4>
+        <span class="badge qiita">Qiita</span>
+        <p>Claude Code の導入で開発速度は 4〜5 倍になったものの、著者の疲労は大きく増しました。原因は、開発コストの低下によって過去に却下された「ゾンビ要件」が次々に復活することと、AI が生成する大量の差分を人間が監視・修正しなければならないことにあります。著者は数週間 AI を使った開発を続けたうえで、AI に渡す作業範囲を絞る、「すぐできるはず」という要求に歯止めをかける、人間側の思考のペースを守る、といったルールを意識するようにしました。AI が削った時間は新たな要求の処理や後始末に消えやすいため、人間のリズムを取り戻す仕組みづくりが重要だと述べています。</p>
+      </article>
+      <article class="rep">
+        <h4><a href="https://zenn.dev/kirinukiauto/articles/91d8bdb1d65273" target="_blank" rel="noopener">国会の会議録を正解にして、自作の書き起こしとYouTubeの自動字幕の誤りを数えたら、取り違えが約3分の1だった</a></h4>
+        <span class="badge zenn">Zenn</span>
+        <p>政治の切り抜き動画の字幕に使う自作の書き起こしの精度を、YouTube の自動字幕と比べた記事です。正解には国会会議録検索システムの公開全文を使い、10 月 5 日の衆議院本会議での首相の所信表明演説を含む 1 本の動画で、重なる 868 字を比較しました。結果は、自作の書き起こしが誤り率 3.00%（26 字）、YouTube の自動字幕が 5.07%（44 字）で、誤りの箇所数では自作が約 3 分の 1 でした。ただし標本は 1 本だけで、有料の書き起こしツールとの比較は行っていないと筆者は明記しています。</p>
+      </article>
+      <article class="rep">
+        <h4><a href="https://zenn.dev/jiraiyablog/articles/wordpress-to-astro-moving-steps" target="_blank" rel="noopener">WordPressからAstroへ：AIにお任せで簡単に移行？</a></h4>
+        <span class="badge zenn">Zenn</span>
+        <p>WordPress のブログを同じ住所のまま Astro へ移す際、AI への自動設定にしても、送り先の変更で止まったという問題を扱っています。置き場所の登録と送信の 2 回で断られ、断られた会話の入力欄に許可の一文を書いたところ先へ進めました。自動設定でも許可を求められたら自分で許可の一文を書くことが次回への教訓になっています。全体は 11 の手順にまとめられ、手順 0〜7 は練習用の WordPress、手順 8〜10 は本番を読み取り専用で確かめた記録です。</p>
+      </article>
+      <details class="others">
+        <summary>その他の記事（7件）</summary>
+        <ul class="others">
+          <li><a href="https://zenn.dev/rapls/articles/2834157734ea06" target="_blank" rel="noopener">WordPress のプラグインしか作ったことがない私が、iPhone アプリを Claude Code と作り始める前に相談したこと</a> <span class="badge zenn">Zenn</span><span class="point">WordPress プラグイン開発者が、iPhone アプリを Claude Code と作り始める前に相談したこと</span></li>
+          <li><a href="https://zenn.dev/ikuokuotiak/articles/claude-python-csv-auto-transform-launchd" target="_blank" rel="noopener">ClaudeとPythonでCSVデータを自動整形！launchd常駐で業務効率化</a> <span class="badge zenn">Zenn</span><span class="point">Claude と Python で CSV データを自動整形し、launchd で常駐させる</span></li>
+          <li><a href="https://zenn.dev/rgbkids/books/ce5d3983abfd8f" target="_blank" rel="noopener">Java 17 + Spring Bootではじめるマイクロサービス開発 〜REST / gRPC / GKE / Claude Cod〜</a> <span class="badge zenn">Zenn</span><span class="point">Java 17 と Spring Boot で、REST / gRPC / GKE まで扱うマイクロサービス開発の本</span></li>
+          <li><a href="https://zenn.dev/hazy_viper/articles/rsna-knee-2026-bronze" target="_blank" rel="noopener">Kaggle RSNA 膝MRIコンペで銅メダル：やって良かったこと・やらなきゃ良かったこと</a> <span class="badge zenn">Zenn</span><span class="point">Kaggle RSNA 膝 MRI コンペで銅メダルを取り、やってよかったこととやらなければよかったこと</span></li>
+          <li><a href="https://zenn.dev/yasse/articles/isucon2026-isureal-log" target="_blank" rel="noopener">ISUCONに初参加してきました！</a> <span class="badge zenn">Zenn</span><span class="point">ISUCON に 2 人チームで初参加した参加記</span></li>
+          <li><a href="https://zenn.dev/mazrean/articles/5c968503fd69a3" target="_blank" rel="noopener">ISUCON2026 にツールを捨てて勝ちたかった</a> <span class="badge zenn">Zenn</span><span class="point">ISUCON2026 に INUCON2026 として参加した参加記。最終スコアは 198,146</span></li>
+          <li><a href="https://qiita.com/Uri_memo/items/8efa1a2c47a0c38b4c85" target="_blank" rel="noopener">ミニゲーム28本！ブラウザで遊べる3Dパーティーゲームを作った</a> <span class="badge qiita">Qiita</span><span class="point">ブラウザで遊べる 3D パーティーゲーム（ミニゲーム 28 本）を作った</span></li>
+        </ul>
+      </details>
+    </section>
+
+    <section class="theme" id="theme-4">
+      <h2>LLM 動向・コスト計測<span class="count">4件</span></h2>
+      <p class="blurb">モデル動向、Agent SDK の請求の内訳、OpenTelemetry による計測、ローカル LLM と、選択とコストを扱う記事です。</p>
+      <h3 class="sub">代表記事</h3>
+      <article class="rep">
+        <h4><a href="https://zenn.dev/shoyataguchi/articles/2495be9f531d85" target="_blank" rel="noopener">2026年後半のLLM動向: この数か月の進化を振り返る</a></h4>
+        <span class="badge zenn">Zenn</span>
+        <p>新モデルや価格改定が相次ぐ中で、性能・価格・ハーネスの使いやすさを踏まえて、どの開発環境を選ぶか、作り込んだ仕組みをどこまで維持するかが課題になっています。筆者は 2026 年後半の主要各社のリリースを振り返り、OpenCode で上位モデルを設計役、安価なモデルを実装役に分ける構成から、Claude Code や Codex へ移行しつつ、ループエンジニアリングの仕組みを改善してきた経緯をたどっています。各社の性能差は縮まり、上位クラスの能力が普段使いの価格帯にも広がっているとしています。便利なハーネス機能を使いながら次の乗り換えコストを抑える加減は、まだ試行錯誤中だそうです。</p>
+      </article>
+      <article class="rep">
+        <h4><a href="https://zenn.dev/keisato848/articles/agent-sdk-cache-bill" target="_blank" rel="noopener">Claude Agent SDK を使ってみた。何往復もの作業におすすめ</a></h4>
+        <span class="badge zenn">Zenn</span>
+        <p>Claude Agent SDK で教材の台本づくりなどを 405 回実行し、費用は合計 $184.51 でした。キャッシュの読みは入力トークンの 93% を占めましたが、請求では 20% にとどまり、出力と書き込みで請求の 8 割近くを占めていました。キャッシュがなければ約 5 倍の費用になっていた計算です。筆者は、キャッシュ率が高くても請求が安いとは限らないとまとめ、実行ごとの費用を記録して自分で内訳を出すことを勧めています。ただし、これは筆者の 1 つの利用例での結果です。</p>
+      </article>
+      <article class="rep">
+        <h4><a href="https://zenn.dev/web_benriya/articles/claude-code-opentelemetry-bigquery-observability" target="_blank" rel="noopener">Claude CodeのOpenTelemetryをBigQueryに流してAIコーディングのコストと失敗を可視化する</a></h4>
+        <span class="badge zenn">Zenn</span>
+        <p>AI コーディングエージェントを使うと、タスクごとのコストやツールの失敗が見えず、キャッシュが効いているかも分からないという問題があります。筆者は Claude Code の OpenTelemetry を有効にし、Collector 経由で Cloud Logging から BigQuery へ流す構成を作りました。そのうえで、日別・モデル別のコスト、キャッシュヒット率、ツール別の失敗率、プロンプト単位のコストなどを SQL で分析する方法を示しています。結論は、計測できれば改善につなげられるので、まず可視化から始めるべき、というものです。なお、記事中の実測値のセクションは未記入のままで、具体的な数値結果は示されていません。</p>
+      </article>
+      <details class="others">
+        <summary>その他の記事（1件）</summary>
+        <ul class="others">
+          <li><a href="https://zenn.dev/asap/articles/d124a6c6d16552" target="_blank" rel="noopener">DGX Spark1台でQwen3.8 Flash NextをClaude CodeとDeepSeek Harnessから動かす</a> <span class="badge zenn">Zenn</span><span class="point">DGX Spark 1 台で Qwen3.8 Flash Next を Claude Code と DeepSeek Harness から動かす</span></li>
+        </ul>
+      </details>
+    </section>
+
+    <section class="theme" id="theme-5">
+      <h2>Claude Code のリリース<span class="count">4件</span></h2>
+      <p class="blurb">anthropics/claude-code の v2.1.311〜v2.1.316 の 4 リリースです。</p>
+      <h3 class="sub">代表記事</h3>
+      <article class="rep">
+        <h4><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.316" target="_blank" rel="noopener">v2.1.316</a></h4>
+        <span class="badge github">GitHub Releases</span>
+        <p>v2.1.316 では、<code>CLAUDE_CODE_DISABLE_ULTRATHINK</code>（ultrathink キーワードの無効化）や <code>CLAUDE_CODE_SUBAGENT_EFFORT</code>（サブエージェントの effort レベル指定）などの環境変数が追加されました。Claude apps gateway には、メンバーで共有する月次予算（<code>pooled_budget</code>）と、一致したすべてのポリシーを重ねて適用する <code>managed.policy_mode: layered</code> が加わっています。一方、Opus 4.8 のファストモードは 2026 年 10 月 30 日付で非推奨となり、11 月 30 日に削除されます。削除後はエラーになり、標準モデルへのフォールバックは行われないため、Opus 5.5 への移行が案内されています。</p>
+      </article>
+      <article class="rep">
+        <h4><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.314" target="_blank" rel="noopener">v2.1.314</a></h4>
+        <span class="badge github">GitHub Releases</span>
+        <p>v2.1.314（2026 年 10 月 30 日公開）では、<code>permissions.blockWritesOutsideWorkingDirectories</code> が追加され、Write・Edit・NotebookEdit が全パーミッションモードで作業ディレクトリ外への書き込みを拒否するようになりました。VS Code と Claude Desktop の Code タブでは、200K トークン以上の会話をアイドル時に要約する機能が加わっています。主な修正として、組織の管理者がモデルの effort を制限している場合のエラーの解消、<code>claude -p</code> が起動失敗時に終了コード 0 で終わる問題の修正（エラーを表示して終了コード 1 で終了）、Bedrock で画像が多いセッションが失敗する問題の修正などがあります。</p>
+      </article>
+      <article class="rep">
+        <h4><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.312" target="_blank" rel="noopener">v2.1.312</a></h4>
+        <span class="badge github">GitHub Releases</span>
+        <p>v2.1.312 では、Claude apps gateway が id_token の <code>sub</code> 以外のクレーム（Microsoft Entra ID の <code>oid</code> など）でユーザーを識別できるようになりました。Bedrock・Vertex・Foundry・Mantle では、未知のモデル名に短いシステムプロンプトを使い、フラグ付きメッセージ後の自動モデル切り替えも未知のモデル名に適用します。使用量制限の表記は「session limit」から「5-hour limit」に変わり、プロンプトフックとエージェントフックの同時実行数に上限が設けられました。VS Code 拡張機能、クラウドセッション、Code Review などの不具合修正と改善も含まれています。</p>
+      </article>
+      <details class="others">
+        <summary>その他の記事（1件）</summary>
+        <ul class="others">
+          <li><a href="https://github.com/anthropics/claude-code/releases/tag/v2.1.311" target="_blank" rel="noopener">v2.1.311</a> <span class="badge github">GitHub Releases</span><span class="point"><code>--hold-idle-file</code> と <code>--max-hold-min</code> が <code>self-hosted-runner</code> に追加された</span></li>
+        </ul>
+      </details>
+    </section>
+
+  </main>
+
+  <footer>data/news.db の直近 7 日の記事から作成</footer>
+</div>
+
+</body>
+</html>
