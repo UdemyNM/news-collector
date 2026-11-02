@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>週報 {{DATE}}</title>
+<style>
+  :root {
+    --bg: #f6f7f9;
+    --surface: #ffffff;
+    --text: #1d2330;
+    --muted: #5d6677;
+    --line: #e1e5ec;
+    --accent: #2f5fd0;
+    --accent-soft: #e8eefc;
+    --zenn: #1f7ae0;
+    --qiita: #2c9a3f;
+    --github: #5b3fb0;
+    --code-bg: #eef0f4;
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12151c;
+      --surface: #1b2029;
+      --text: #e6e9ef;
+      --muted: #9aa3b5;
+      --line: #2b3240;
+      --accent: #7ba2ff;
+      --accent-soft: #232c45;
+      --zenn: #6fb0ff;
+      --qiita: #6fd184;
+      --github: #b19cff;
+      --code-bg: #272e3b;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Yu Gothic UI", "Hiragino Sans", "Meiryo", system-ui, sans-serif;
+    line-height: 1.8;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 16px 64px; }
+
+  header.hero { padding: 40px 0 24px; }
+  .hero .label { color: var(--accent); font-weight: 700; letter-spacing: .08em; font-size: .85rem; }
+  .hero h1 { margin: 4px 0 12px; font-size: 2rem; line-height: 1.3; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+  .meta li {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 999px; padding: 2px 14px; font-size: .9rem; color: var(--muted);
+  }
+  .meta strong { color: var(--text); }
+
+  nav.toc {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 16px 20px; margin-bottom: 32px;
+  }
+  nav.toc h2 { margin: 0 0 8px; font-size: .95rem; color: var(--muted); }
+  nav.toc ol { margin: 0; padding-left: 1.4em; columns: 2 260px; }
+  nav.toc a { color: var(--text); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); text-decoration: underline; }
+  nav.toc .n { color: var(--muted); font-size: .85rem; margin-left: 4px; }
+
+  section.theme { margin-bottom: 48px; scroll-margin-top: 16px; }
+  section.theme > h2 {
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    margin: 0 0 4px; font-size: 1.4rem;
+    padding-left: 12px; border-left: 5px solid var(--accent);
+  }
+  .count {
+    font-size: .8rem; font-weight: 600; color: var(--accent);
+    background: var(--accent-soft); border-radius: 999px; padding: 0 10px;
+  }
+  .blurb { margin: 8px 0 16px; color: var(--muted); }
+  h3.sub { margin: 20px 0 8px; font-size: .85rem; letter-spacing: .06em; color: var(--muted); }
+
+  article.rep {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px;
+  }
+  article.rep h4 { margin: 0 0 6px; font-size: 1.05rem; line-height: 1.5; }
+  article.rep h4 a { color: var(--text); text-decoration: none; }
+  article.rep h4 a:hover { color: var(--accent); text-decoration: underline; }
+  article.rep p { margin: 8px 0 0; }
+
+  .badge {
+    display: inline-block; font-size: .75rem; font-weight: 700;
+    border: 1px solid currentColor; border-radius: 6px; padding: 0 8px;
+    line-height: 1.6; white-space: nowrap;
+  }
+  .badge.zenn { color: var(--zenn); }
+  .badge.qiita { color: var(--qiita); }
+  .badge.github { color: var(--github); }
+
+  details.others {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 4px 20px;
+  }
+  details.others summary { cursor: pointer; padding: 10px 0; color: var(--muted); font-size: .9rem; }
+  ul.others { list-style: none; margin: 0; padding: 0 0 8px; }
+  ul.others li { padding: 8px 0; border-top: 1px solid var(--line); font-size: .95rem; }
+  ul.others a { color: var(--accent); text-decoration: none; }
+  ul.others a:hover { text-decoration: underline; }
+  ul.others .point { display: block; color: var(--muted); font-size: .88rem; margin-top: 2px; }
+
+  code { background: var(--code-bg); border-radius: 4px; padding: 1px 5px; font-size: .88em; word-break: break-all; }
+  footer { color: var(--muted); font-size: .85rem; text-align: center; padding-top: 16px; border-top: 1px solid var(--line); }
+
+  @media (max-width: 560px) {
+    .hero h1 { font-size: 1.6rem; }
+    article.rep { padding: 14px 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="label">WEEKLY REPORT</div>
+    <h1>週報 {{DATE}}</h1>
+    <ul class="meta">
+      <li>対象期間 <strong>{{PERIOD}}</strong></li>
+      <li>記事 <strong>{{COUNT}}</strong> 件</li>
+    </ul>
+  </header>
+
+  <nav class="toc" aria-label="テーマ一覧">
+    <h2>テーマ</h2>
+    <ol>
+{{NAV}}
+    </ol>
+  </nav>
+
+  <main>
+{{SECTIONS}}
+  </main>
+
+  <footer>data/news.db の直近 7 日の記事から作成</footer>
+</div>
+
+<!-- 以下は生成用の部品。生成時に取り除かれる。 -->
+<template data-part="nav">
+      <li><a href="#{{ID}}">{{NAME}}</a><span class="n">{{N}}件</span></li>
+</template>
+
+<template data-part="section">
+    <section class="theme" id="{{ID}}">
+      <h2>{{NAME}}<span class="count">{{N}}件</span></h2>
+      <p class="blurb">{{BLURB}}</p>
+      <h3 class="sub">代表記事</h3>
+{{REPS}}
+{{OTHERS}}
+    </section>
+</template>
+
+<template data-part="rep">
+      <article class="rep">
+        <h4><a href="{{URL}}" target="_blank" rel="noopener">{{TITLE}}</a></h4>
+        <span class="badge {{SRCCLASS}}">{{SRC}}</span>
+        <p>{{SUMMARY}}</p>
+      </article>
+</template>
+
+<template data-part="others">
+      <details class="others">
+        <summary>その他の記事（{{N}}件）</summary>
+        <ul class="others">
+{{ITEMS}}
+        </ul>
+      </details>
+</template>
+
+<template data-part="item">
+          <li><a href="{{URL}}" target="_blank" rel="noopener">{{TITLE}}</a> <span class="badge {{SRCCLASS}}">{{SRC}}</span><span class="point">{{POINT}}</span></li>
+</template>
+</body>
+</html>
